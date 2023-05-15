@@ -122,6 +122,7 @@ class AlbumActivity : AppCompatActivity(), AlbumRecyclerViewAdapter.Listener{
         val intent = Intent(this,SongsActivity::class.java)
         intent.putExtra("albumId",artistAlbumModel.id)
         intent.putExtra("albumName",artistAlbumModel.title)
+        intent.putExtra("album_photo",artistAlbumModel.cover_small)
         startActivity(intent)
 
     }

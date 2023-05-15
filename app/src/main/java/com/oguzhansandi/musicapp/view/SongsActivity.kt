@@ -5,6 +5,8 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
+import com.oguzhansandi.musicapp.R
 import com.oguzhansandi.musicapp.adapter.SongsRecyclerViewAdapter
 import com.oguzhansandi.musicapp.databinding.ActivitySongsBinding
 import com.oguzhansandi.musicapp.model.ArtistAlbumResponseModel
@@ -31,6 +33,7 @@ class SongsActivity : AppCompatActivity(), SongsRecyclerViewAdapter.Listener {
     private var albumId = 0
     private var songsId = 0
     private var albumName = ""
+    private var album_photo = ""
     var mediaPlayer = MediaPlayer()
 
 
@@ -43,6 +46,9 @@ class SongsActivity : AppCompatActivity(), SongsRecyclerViewAdapter.Listener {
         binding = ActivitySongsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         //RecyclerView
+        album_photo = intent.getStringExtra("album_photo").toString()
+
+
         albumId = intent.getIntExtra("albumId",0)
         albumName = intent.getStringExtra("albumName").toString()
         println("albumId:: $albumId")
@@ -70,7 +76,7 @@ class SongsActivity : AppCompatActivity(), SongsRecyclerViewAdapter.Listener {
                         println("model ${songResponse?.data?.size}")
 
                         artistsSongsList!!.data?.let {
-                            songsRecyclerViewAdapter = SongsRecyclerViewAdapter(it,this@SongsActivity)
+                            songsRecyclerViewAdapter = SongsRecyclerViewAdapter(it,this@SongsActivity,album_photo)
                             binding.recyclerViewSongs.adapter = songsRecyclerViewAdapter
                             binding.recyclerViewSongs.setHasFixedSize(true)
                         }
@@ -103,34 +109,6 @@ class SongsActivity : AppCompatActivity(), SongsRecyclerViewAdapter.Listener {
             mediaPlayer.start()
         }
     }
-    /*
-        private fun loadSongs(){
-            val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(SongsAPI::class.java)
-
-            job = CoroutineScope(Dispatchers.IO).launch{
-                val response = retrofit.getAlbum(albumId)
-
-                withContext(Dispatchers.Main + exceptionHandler){
-                    if (response.isSuccessful){
-                        response.body()?.let {
-                            artistAlbum = albumResponse
-                            println("model ${albumResponse?.data?.size}")
-
-                            artistAlbum!!.data?.let {
-                                binding.albumText.text =
-                            }
-
-
-                        }
-                    }
-                }
-            }
-
-    }*/
 
 
     override fun onDestroy() {

@@ -9,37 +9,22 @@ import com.bumptech.glide.Glide
 import com.oguzhansandi.musicapp.R
 import com.oguzhansandi.musicapp.model.ArtistSongsModel
 import kotlinx.android.synthetic.main.album_layout.view.album_image
+import kotlinx.android.synthetic.main.artist_layout.view.artists_image
+import kotlinx.android.synthetic.main.row_layout.view.image_view
+import kotlinx.android.synthetic.main.songs_layout.view.song_image
 import kotlinx.android.synthetic.main.songs_layout.view.song_name
 
-class SongsRecyclerViewAdapter(private val artistSongsList : ArrayList<ArtistSongsModel>, private val listener : Listener) : RecyclerView.Adapter<SongsRecyclerViewAdapter.SongsRowHolder>() {
+class SongsRecyclerViewAdapter(private val artistSongsList : ArrayList<ArtistSongsModel>, private val listener : Listener, private val photo: String) : RecyclerView.Adapter<SongsRecyclerViewAdapter.SongsRowHolder>() {
+
     interface Listener{
         fun onItemClick(artistSongsModel: ArtistSongsModel)
     }
-
-
-
     class SongsRowHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-
-
         fun bind(artistSongsModel: ArtistSongsModel, position: Int, listener : Listener) {
-
             itemView.setOnClickListener {
                 listener.onItemClick(artistSongsModel)
             }
-
-
-
-/*
-            val url = artistSongsModel.md5_image
-
-            Glide
-                .with(itemView.context)
-                .load(url)
-                .centerCrop()
-                .placeholder(R.mipmap.ic_launcher)
-                .into(itemView.album_image);
-*/
 
             itemView.song_name.text = artistSongsModel.title
            // itemView.album_duration.text = artistSongsModel.duration
@@ -58,5 +43,12 @@ class SongsRecyclerViewAdapter(private val artistSongsList : ArrayList<ArtistSon
 
     override fun onBindViewHolder(holder: SongsRowHolder, position: Int) {
         holder.bind(artistSongsList[position],position,listener)
+
+        Glide
+            .with(holder.itemView.context)
+            .load(photo)
+            .centerCrop()
+            .placeholder(R.mipmap.ic_launcher)
+            .into(holder.itemView.song_image);
     }
 }
